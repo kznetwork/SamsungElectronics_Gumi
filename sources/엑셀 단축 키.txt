@@ -1,0 +1,45 @@
+▶shift + 방향키 : 셀 범위 지정
+▶ctrl + space bar : 열 전체 범위 지정
+▶ctrl + shift + 방향키(↓→ 등) : 행/열 마지막 셀까지 지정
+▶shift + space bar : 행 전체 범위 지정
+▶ctrl + a : 전체 범위 지정
+▶ctrl + shift + end : 마지막 셀까지 지정
+
+▶ctrl + shift + [+키] : 행 또는 열 삽입
+▶ctrl + [-키] : 행 또는 열 삭제
+
+▶ctrl + enter : 셀 범위에 동일한 내용 입력
+▶ctrl + d : 위의 셀 내용 복사
+
+▶ctrl + 9 : 행 숨기기
+▶ctrl + shift + 9 : 행 숨기기 취소
+
+
+▶ctrl + b : 굵게
+▶ctrl + i : 기울임
+▶ctrl + u :밑줄
+▶ctrl + 5 : 취소선(삭제선)
+▶ctrl + shift + 1 : 쉼표 스타일 (1,000 단위 구분 기호)
+
+▶ctrl + l : 표 만들기
+▶ctrl + T : 표 등록
+
+▶ctrl + shift + L 필터
+
+▶alt + enter : 셀 안에 줄 바꾸기
+
+▶ctrl + c : 복사
+▶ctrl + v : 붙여넣기
+▶ctrl + x : 잘라내기
+▶ctrl + z : 실행취소
+▶ctrl + y : 다시실행
+▶ctrl + alt + v : 선택하여 붙여넣기
+
+▶ctrl + 화살표 키 : 워크 시트 내 끝으로 이동
+
+▶ctrl + s : 저장
+▶ctrl + o : 파일 열기
+▶ctrl + p : 인쇄
+▶ctrl + f : 찾기 및 바꾸기
+▶shift + f3 : 함수 마법사
+▶alt + f4 : 종료
