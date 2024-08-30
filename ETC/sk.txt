@@ -1,0 +1,3 @@
+sk
+
+os.environ["OPENAI_API_KEY"] = "proj-xxFWZqgVeVHO4Q0dwWlvT3BlbkFJQ7NkGfmxHjxauWXefbzY"
