@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPT-OSS Chat</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="header-left">
+                <h1>🤖 GPT-OSS Chat</h1>
+                <span class="connection-status" id="connectionStatus">
+                    <span class="status-dot"></span>
+                    <span class="status-text">확인 중...</span>
+                </span>
+            </div>
+            <div class="header-controls">
+                <div class="temperature-control">
+                    <label for="temperature">Temperature:</label>
+                    <input type="number" id="temperature" min="0" max="2" step="0.1" value="0.7">
+                    <span class="temperature-value">0.7</span>
+                </div>
+                <div class="toggle-streaming">
+                    <input type="checkbox" id="streamingToggle" checked>
+                    <label for="streamingToggle">스트리밍</label>
+                </div>
+                <button class="btn-reset" onclick="chatManager.resetChat()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                        <path d="M3 3v5h5"/>
+                    </svg>
+                    새 대화
+                </button>
+            </div>
+        </div>
+        
+        <div class="status-bar" id="statusBar">
+            <span id="status">준비됨</span>
+        </div>
+        
+        <div class="chat-messages" id="chatMessages">
+            <div class="welcome-message">
+                <h2>👋 안녕하세요!</h2>
+                <p>GPT-OSS와 대화를 시작해보세요.</p>
+                <div class="suggested-prompts">
+                    <button class="prompt-chip" onclick="chatManager.sendSuggestedPrompt('안녕하세요! 자기소개를 해주세요.')">
+                        자기소개 부탁해요
+                    </button>
+                    <button class="prompt-chip" onclick="chatManager.sendSuggestedPrompt('파이썬으로 Hello World를 출력하는 방법을 알려주세요.')">
+                        Python Hello World
+                    </button>
+                    <button class="prompt-chip" onclick="chatManager.sendSuggestedPrompt('오늘 날씨가 어때요?')">
+                        날씨 물어보기
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chat-input">
+            <div class="input-container">
+                <textarea 
+                    id="messageInput" 
+                    placeholder="메시지를 입력하세요... (Shift+Enter로 줄바꿈)"
+                    rows="1"
+                ></textarea>
+                <button id="sendButton" onclick="chatManager.sendMessage()" disabled>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </div>
+            <div class="input-info">
+                <span id="charCount">0</span> / 4000 문자
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

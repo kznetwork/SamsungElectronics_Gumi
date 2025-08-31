@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP LangGraph 에이전트</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/style_simple.css') }}">
+    <!-- marked.js 라이브러리 추가 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <h1>MCP LangGraph 에이전트</h1>
+    <div id="chat-box"></div>
+    <form id="chat-form">
+        <input type="text" id="chat-input" placeholder="메시지를 입력하세요..." autocomplete="off">
+        <button id="send-button">전송</button>
+    </form>
+
+    <script src="{{ url_for('static', path='/script.js') }}"></script>
+</body>
+</html>
