@@ -1,0 +1,6 @@
+_type: prompt
+input_variables: ["context", "question"]
+template: |
+  컨텍스트: {context}
+  질문: {question}
+  답변:
