@@ -1,0 +1,150 @@
+#####
+# LangChain 설정
+
+import os
+
+os.environ["OPENAI_API_KEY"] = "zRZHbfPv333AyuMmkzGuT3BlbkFJWnWQQk37Qa0UnCgXuP7b"
+
+from langchain.vectorstores import Chroma
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.chat_models import ChatOpenAI
+from langchain.chains import RetrievalQA
+from langchain.document_loaders import TextLoader
+from langchain.document_loaders import DirectoryLoader
+from collections import Counter
+
+#####
+# 여러 문서를 로드하고 문서 처리
+
+text_loader_kwargs={'autodetect_encoding': True}
+
+loader = DirectoryLoader('./data', glob="*.txt", loader_cls=TextLoader, loader_kwargs=text_loader_kwargs)
+
+documents = loader.load()
+
+print('문서의 개수 :', len(documents))
+
+print('1번 문서 :', documents[1])
+print('-' * 20)
+print('21번 문서 :', documents[21])
+print('-' * 20)
+
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+texts = text_splitter.split_documents(documents)
+
+print('분할된 텍스트의 개수 :', len(texts))
+
+print('첫 번째 내용 출력 : ', texts[0])
+
+source_lst = []
+for i in range(0, len(texts)):
+  source_lst.append(texts[i].metadata['source'])
+
+element_counts = Counter(source_lst)
+filtered_counts = {key: value for key, value in element_counts.items() if value >= 2}
+print('2개 이상으로 분할된 문서 :', filtered_counts)
+print('분할된 텍스트의 개수 :', len(documents) + len(filtered_counts))
+
+
+#####
+# Chroma DB 생성
+
+embedding = OpenAIEmbeddings()
+
+vectordb = Chroma.from_documents(
+    documents=texts,
+    embedding=embedding)
+
+#####
+# retriever 만들기
+
+# retriever = vectordb.as_retriever()
+
+# docs = retriever.get_relevant_documents("신혼 부부를 위한 정책이 있어?")
+# print('유사 문서 개수 :', len(docs))
+# print('--' * 20)
+# print('첫번째 유사 문서 :', docs[0])
+# print('--' * 20)
+# print('각 유사 문서의 문서 출처 :')
+# for doc in docs:
+#     print(doc.metadata["source"])
+
+
+#####
+# 결과를 k개 반환
+    
+retriever = vectordb.as_retriever(search_kwargs={"k": 2})
+
+docs = retriever.get_relevant_documents("신혼 부부를 위한 정책이 있어?")
+
+for doc in docs:
+    print(doc.metadata["source"])
+
+#####
+# Make a chain
+
+    
+# Use the following pieces of context to answer the users question.
+# If you don't know the answer, just say that you don't know, don't try to make up an answer.
+# ----------------
+# {텍스트}
+
+# {질문}
+    
+qa_chain = RetrievalQA.from_chain_type(
+    llm=ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0),
+    chain_type="stuff",
+    retriever=retriever,
+    return_source_documents=True)
+
+#####
+# Query
+
+input_text = "대출과 관련된 정책이 궁금합니다"
+chatbot_response = qa_chain(input_text)
+print(chatbot_response)
+
+# get_chatbot_response 함수 구현
+def get_chatbot_response(chatbot_response):
+    print(chatbot_response['result'].strip())
+    print('\n문서 출처:')
+    for source in chatbot_response["source_documents"]:
+        print(source.metadata['source'])
+
+input_text = "신혼 부부의 신혼집 마련을 위한 정책이 있을까?"
+chatbot_response = qa_chain(input_text)
+get_chatbot_response(chatbot_response)
+
+print(chatbot_response)
+
+import gradio as gr
+
+# 인터페이스를 생성.
+with gr.Blocks() as demo:
+    chatbot = gr.Chatbot(label="청년정책챗봇") # 청년정책챗봇 레이블을 좌측 상단에 구성
+    msg = gr.Textbox(label="질문해주세요!")  # 하단의 채팅창의 레이블
+    clear = gr.Button("대화 초기화")  # 대화 초기화 버튼
+
+    # 챗봇의 답변을 처리하는 함수
+    def respond(message, chat_history):
+      result = qa_chain(message)
+      bot_message = result['result']
+      bot_message += ' # sources :'
+
+      # 답변의 출처를 표기
+      for i, doc in enumerate(result['source_documents']):
+          bot_message += '[' + str(i+1) + '] ' + doc.metadata['source'] + ' '
+
+      # 채팅 기록에 사용자의 메시지와 봇의 응답을 추가.
+      chat_history.append((message, bot_message))
+      return "", chat_history
+
+    # 사용자의 입력을 제출(submit)하면 respond 함수가 호출.
+    msg.submit(respond, [msg, chatbot], [msg, chatbot])
+
+    # '초기화' 버튼을 클릭하면 채팅 기록을 초기화.
+    clear.click(lambda: None, None, chatbot, queue=False)
+
+# 인터페이스 실행.
+demo.launch(debug=True)
