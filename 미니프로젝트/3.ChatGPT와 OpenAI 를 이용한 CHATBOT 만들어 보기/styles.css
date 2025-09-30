@@ -1,0 +1,95 @@
+/* Your existing CSS styles from the two files can go here */
+
+/* Navbar styles */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: #fff;
+    padding: 15px;
+  }
+  
+  .logo a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 24px;
+  }
+  
+  .menu-icon {
+    display: none;
+    cursor: pointer;
+  }
+  
+  .menu {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+  
+  .menu ul li {
+    margin-left: 20px;
+  }
+  
+  .menu ul li a {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  /* Content styles */
+  .content {
+    padding: 20px;
+  }
+  
+  /* Hamburger menu styles */
+  .bar {
+    width: 25px;
+    height: 3px;
+    background-color: #fff;
+    margin: 5px 0;
+    transition: 0.4s;
+  }
+  
+  .show-menu .bar:nth-child(1) {
+    transform: rotate(-45deg) translate(-5px, 6px);
+  }
+  
+  .show-menu .bar:nth-child(2) {
+    opacity: 0;
+  }
+  
+  .show-menu .bar:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -6px);
+  }
+  
+  /* Media query for responsive design */
+  @media (max-width: 768px) {
+    .menu {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 60px;
+      right: 0;
+      width: 100%;
+      background-color: #333;
+    }
+  
+    .menu.show-menu {
+      display: flex;
+    }
+  
+    .menu ul {
+      flex-direction: column;
+    }
+  
+    .menu-icon {
+      display: block;
+    }
+  }
+  
